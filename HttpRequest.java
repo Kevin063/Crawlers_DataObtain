@@ -1,4 +1,12 @@
 
+
+
+
+//The main program to get subpage IDs and use separated connections to find the final data inside pages under keyword searching.
+
+
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -14,18 +22,18 @@ import java.util.Map;
 
 public class HttpRequest {
     /**
-     * ÏòÖ¸¶¨ URL ·¢ËÍPOST·½·¨µÄÇëÇó
+     * å‘æŒ‡å®š URL å‘é€POSTæ–¹æ³•çš„è¯·æ±‚
      * 
      * @param url
-     *            ·¢ËÍÇëÇóµÄ URL
+     *            å‘é€è¯·æ±‚çš„ URL
      * @param param
-     *            ÇëÇó²ÎÊı£¬ÇëÇó²ÎÊıÓ¦¸ÃÊÇ name1=value1&name2=value2 µÄĞÎÊ½¡£
-     * @return Ëù´ú±íÔ¶³Ì×ÊÔ´µÄÏìÓ¦½á¹û
+     *            è¯·æ±‚å‚æ•°ï¼Œè¯·æ±‚å‚æ•°åº”è¯¥æ˜¯ name1=value1&name2=value2 çš„å½¢å¼ã€‚
+     * @return æ‰€ä»£è¡¨è¿œç¨‹èµ„æºçš„å“åº”ç»“æœ
      */
 	static String url="http://icid.iachina.cn/front/viewThird.do";
 	static String path="C:\\Users\\liuhengyuan-jk\\Desktop\\Programs\\crawlers\\company link.txt";
 	static String outputadd="C:\\Users\\liuhengyuan-jk\\Desktop\\Programs\\crawlers\\ThirdLIst.txt";
-	static String magic2=";\">²é¿´ºÏ×÷µÚÈı·½ÏêÇé</a></p>";
+	static String magic2=";\">æŸ¥çœ‹åˆä½œç¬¬ä¸‰æ–¹è¯¦æƒ…</a></p>";
 	static String finalurl="http://icid.iachina.cn/front/viewTerraceProduct.do";
 	public static String sendPost(String url, String param) {
         PrintWriter out = null;
@@ -33,23 +41,23 @@ public class HttpRequest {
         String result = "";
         try {
             URL realUrl = new URL(url);
-            // ´ò¿ªºÍURLÖ®¼äµÄÁ¬½Ó
+            // æ‰“å¼€å’ŒURLä¹‹é—´çš„è¿æ¥
             URLConnection conn = realUrl.openConnection();
-            // ÉèÖÃÍ¨ÓÃµÄÇëÇóÊôĞÔ
+            // è®¾ç½®é€šç”¨çš„è¯·æ±‚å±æ€§
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("user-agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // ·¢ËÍPOSTÇëÇó±ØĞëÉèÖÃÈçÏÂÁ½ĞĞ
+            // å‘é€POSTè¯·æ±‚å¿…é¡»è®¾ç½®å¦‚ä¸‹ä¸¤è¡Œ
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            // »ñÈ¡URLConnection¶ÔÏó¶ÔÓ¦µÄÊä³öÁ÷
+            // è·å–URLConnectionå¯¹è±¡å¯¹åº”çš„è¾“å‡ºæµ
             out = new PrintWriter(conn.getOutputStream());
-            // ·¢ËÍÇëÇó²ÎÊı
+            // å‘é€è¯·æ±‚å‚æ•°
             out.print(param);
-            // flushÊä³öÁ÷µÄ»º³å
+            // flushè¾“å‡ºæµçš„ç¼“å†²
             out.flush();
-            // ¶¨ÒåBufferedReaderÊäÈëÁ÷À´¶ÁÈ¡URLµÄÏìÓ¦
+            // å®šä¹‰BufferedReaderè¾“å…¥æµæ¥è¯»å–URLçš„å“åº”
             in = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
             String line;
@@ -57,10 +65,10 @@ public class HttpRequest {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("·¢ËÍ POST ÇëÇó³öÏÖÒì³££¡"+e);
+            System.out.println("å‘é€ POST è¯·æ±‚å‡ºç°å¼‚å¸¸ï¼"+e);
             e.printStackTrace();
         }
-        //Ê¹ÓÃfinally¿éÀ´¹Ø±ÕÊä³öÁ÷¡¢ÊäÈëÁ÷
+        //ä½¿ç”¨finallyå—æ¥å…³é—­è¾“å‡ºæµã€è¾“å…¥æµ
         finally{
             try{
                 if(out!=null){
@@ -95,12 +103,12 @@ public class HttpRequest {
 			System.out.println("Processing:"+param);//report process
 			// Wait blocking rule to end, test per 10 min.
 			while(list.indexOf("010-66290327")!=-1) {
-				System.out.println("ÒÑÍê³É×¥È¡Êı£º"+finished);
+				System.out.println("å·²å®ŒæˆæŠ“å–æ•°ï¼š"+finished);
 				Thread.sleep(600000);
 				list=sendPost(url,param);
 			}
 			//Clean the page data. Find all the info we need inside.
-			if(list.indexOf("ÀúÊ·ºÏ×÷µÚÈı·½")!=-1) list.substring(0,list.indexOf("ÀúÊ·ºÏ×÷µÚÈı·½"));
+			if(list.indexOf("å†å²åˆä½œç¬¬ä¸‰æ–¹")!=-1) list.substring(0,list.indexOf("å†å²åˆä½œç¬¬ä¸‰æ–¹"));
 					while(list.indexOf("onclick=\"zjDetail")!=-1) {
 						list=list.substring(list.indexOf("onclick=\"zjDetail")+19);
 						String code=list.substring(0,list.indexOf("','"));
@@ -110,15 +118,15 @@ public class HttpRequest {
 						String finalpage=sendPost(finalurl,param);
 						// Wait blocking rule to end, test per 10 min
 						while(finalpage.indexOf("010-66290327")!=-1) {
-							System.out.println("ÒÑÍê³É×¥È¡Êı£º"+finished);
+							System.out.println("å·²å®ŒæˆæŠ“å–æ•°ï¼š"+finished);
 							Thread.sleep(600000);
 							finalpage=sendPost(finalurl,param);
 						}
 						//Use the data to send a request, then clean the data and find what we need.
-						if(finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨È«³Æ")+17>0&&finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨¼ò³Æ")-17>0&&finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨ÍøÕ¾µØÖ·")+19>0&&finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨±¸°¸ĞÅÏ¢")-17>0) 	
+						if(finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°å…¨ç§°")+17>0&&finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°ç®€ç§°")-17>0&&finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°ç½‘ç«™åœ°å€")+19>0&&finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°å¤‡æ¡ˆä¿¡æ¯")-17>0) 	
 						{
 							Thread.sleep(5001);//Avoid over-frequent visit
-							String finalinfo=finalpage.substring(finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨È«³Æ")+17,finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨¼ò³Æ")-17)+"   "+finalpage.substring(finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨ÍøÕ¾µØÖ·")+19,finalpage.indexOf("µÚÈı·½ÍøÂçÆ½Ì¨±¸°¸ĞÅÏ¢")-17);
+							String finalinfo=finalpage.substring(finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°å…¨ç§°")+17,finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°ç®€ç§°")-17)+"   "+finalpage.substring(finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°ç½‘ç«™åœ°å€")+19,finalpage.indexOf("ç¬¬ä¸‰æ–¹ç½‘ç»œå¹³å°å¤‡æ¡ˆä¿¡æ¯")-17);
 						finished++;
 						output.write(finalinfo);
 						output.newLine();
